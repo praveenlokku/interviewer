@@ -100,14 +100,17 @@ threading.Thread(target=answergiven, daemon=True).start()
 
 
 
+@app.route('/answergiven')
+def answer():
+    return jsonify({"Answer Given": answer_given })
+
 @app.route('/get_question')
 def get_question():
     global question
-    if question:
+    if question:  
         return jsonify({"question": question})
     else:
         return jsonify({"question": "No question available yet."})
-
 
 @app.route('/')
 def index():
@@ -116,6 +119,5 @@ def index():
 @app.route('/video_feed')
 def video_feed():
     return Response(interviewer(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False)
