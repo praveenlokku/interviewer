@@ -6,7 +6,7 @@ import numpy as np
 import speech_recognition as sr
 import google.generativeai as genai
 from keras.models import model_from_json
-from flask import Flask, Response, render_template, jsonify
+from flask import Flask, Response, render_template
 
 app = Flask(__name__)
 
@@ -17,18 +17,11 @@ model_json = json_file.read()
 json_file.close()
 model = model_from_json(model_json)
 model.load_weights("emotiondetector.h5")
+
 haar_file = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
 face_cascade = cv2.CascadeClassifier(haar_file)
-engine = pyttsx3.init()
-engine.setProperty('rate', 130)
-engine.setProperty('volume', 0.8)
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[1].id)
-
 
 labels = {0: 'angry', 1: 'disgust', 2: 'fear', 3: 'happy', 4: 'neutral', 5: 'sad', 6: 'surprise'}
-
-question = ""  
 
 def extract_features(image):
     feature = np.array(image)
@@ -73,33 +66,32 @@ def interviewer():
     webcam.release()
 
 def ask_question():
-    global question
-    genai.configure(api_key='AIzaSyDG6lsSWErYYs5K0uwkIIYUbZmt5XfSQcc')
+    """Function to ask a question using text-to-speech and listen for a response."""
+    genai.configure(api_key='AIzaSyDG6lsSWErYYs5K0uwkIIYUbZmt5XfSQcc') 
     gmodel = genai.GenerativeModel('gemini-pro')
     time.sleep(2)
-    response = gmodel.generate_content(f"Generate a behavioral interview question for a software engineer role.") 
-    question = response.text.strip()
-    engine.say(question)
-    engine.runAndWait()
-
-answer_given = ""
-def answergiven():
-    global answer_given
+    response = gmodel.generate_content(f"Generate an behaviroual interview question for a software engineer role.") 
+    cleaned_question = response.text.strip()
+    pyttsx3.speak(cleaned_question)
     with sr.Microphone() as source:
-        print("Listening for answer...")
+        print("Listening...")
         audio = recognizer.listen(source)
+
         try:
-            answer_given = recognizer.recognize_google(audio, language='en-us')
+            
+            response = recognizer.recognize_google(audio, language='en-US')
+            print(f"User said: {response}")
+            return response
         except sr.UnknownValueError:
-            answer_given = "Could not understand the audio"
+            print("Sorry, I did not understand the audio.")
+            return "I did not understand."
         except sr.RequestError as e:
-            answer_given = f"Error: {e}"
+            print(f"Could not request results from Google Speech Recognition service; {e}")
+            return "Request error."
 
-# Create a new thread for listening
-threading.Thread(target=answergiven, daemon=True).start()
-
-
-
+@app.route('/')
+def index():
+    return render_template('interviewer.html')
 @app.route('/answergiven')
 def answer():
     return jsonify({"Answer Given": answer_given })
@@ -112,12 +104,10 @@ def get_question():
     else:
         return jsonify({"question": "No question available yet."})
 
-@app.route('/')
-def index():
-    return render_template('interviewer.html')
 
 @app.route('/video_feed')
 def video_feed():
     return Response(interviewer(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0',port=5000, debug=False)
