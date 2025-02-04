@@ -1,0 +1,150 @@
+/* Global Reset */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #f0f4f8, #dfe6f0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+    overflow: hidden;
+}
+
+
+/* Login Container */
+
+.login-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 40px 50px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+}
+
+
+/* Header */
+
+h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+
+/* Input Fields */
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #5c6bc0;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(92, 107, 192, 0.1);
+}
+
+
+/* Submit Button */
+
+.login-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #5c6bc0;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-button:hover {
+    background-color: #4c51bf;
+    transform: translateY(-2px);
+}
+
+
+/* Extra Options Links */
+
+.extra-options {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.extra-options a {
+    color: #5c6bc0;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.extra-options a:hover {
+    color: #4c51bf;
+    text-decoration: underline;
+}
+
+
+/* Animation for Login Container */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Mobile Responsiveness */
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 30px 35px;
+    }
+    h2 {
+        font-size: 24px;
+    }
+    .input-group input,
+    .login-button {
+        font-size: 15px;
+    }
+}
