@@ -3,6 +3,7 @@ numpy
 keras
 pandas
 opencv-python
+pymysql
 pyttsx3
 tensorflow
 google.generativeai
